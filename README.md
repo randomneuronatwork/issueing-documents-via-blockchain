@@ -1,0 +1,2 @@
+# issueing-documents-via-blockchain
+Its a most secure way to issue document and prevent any type of tempering and need for verification of document. Document Issuing authority would issue a document with person's blockchain account address in it  and make a transaction. After that that transaction id would be sent to the person as his document . This document can be saved in this wallet. Also any text/docx file can be uploaded using upload document section.  
