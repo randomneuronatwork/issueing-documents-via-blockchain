@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Digi-Locker Profile</title>
+	<script src="./node_modules/web3/dist/web3.min.js"></script>
+	 <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+
+
+
+
+
+
+	<style type="text/css">
+		body {
+            background-image: url("paper.jpg");
+            }
+		#details {
+
+           position: absolute;
+           border: solid;
+           left:25 px;
+           top: 60px;
+           border-width: 2px; 
+           width: 400px;
+           height: 85%;
+           padding-left: 30px;
+           font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+		padding-top: 30px;
+      }
+		
+		#uploaddoc {
+            border: solid;
+			position: absolute;
+			left:450px;
+			top: 60px;
+			border-width: 2px; 
+           width: 400px;
+           height: 85%;
+           padding-left: 30px;
+           font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+		padding-top: 30px;
+		}
+		#docs {
+            border: solid;
+			position: absolute;
+			left:895px;
+			top: 60px;
+			border-width: 2px; 
+           width: 400px;
+           height: 85%;
+           padding-left: 20px;
+           padding-right: 20px;
+           font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+		padding-top: 20px;
+		padding-bottom: 10px;
+		}
+	 #uploadeddocs{
+	 	border:solid;
+        border-width: 2px;
+        position: relative;
+        height: 44%;
+        width: 360 px;
+        padding-left: 5px;
+     }
+     #issueddocs{
+	 	border:solid;
+        border-width: 2px;
+        position: relative;
+        height: 44%;
+        width: 360 px;
+        padding-left: 5px;
+     }
+
+
+	</style>
+</head>
+
+
+
+
+
+
+
+
+
+
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+<body>
+<div id="details">
+	<h2>Personal Details</h2>
+<pre>Name        - Shubham Jagnade</pre>
+<pre>Email       - shubhamjagnade24@gmail.com</pre>
+<pre>Education   - TY B.Tech VJTI</pre>
+<pre>Location    - Mumbai</pre>
+<pre>Acc address -account addres here</pre>	
+</div>
+<div id="uploaddoc">
+	<h2>Upload Documents</h2>
+	<pre>Document  name  - <input type="text" name="doc-name" id="doc-name"></pre>
+	<pre>Authority name  - <input type="text" name="auth-name" id="auth-name"></pre>
+	<pre>select Document - <input type="file" name="doc" id="doc"></pre>
+	<pre>                  <button id="button">upload</button></pre>
+    
+	<br><br><br><br><br><br>
+	<h2>Add Issued Documents</h2>
+	
+	<pre>Document  Hash  - <input type="text" name="dochash" id ="dochash"></pre>
+	<pre>                  <button name="submit" id="submit" >Submit</button></pre>
+	
+</div>
+<div id="docs">
+	<div id="uploadeddocs">
+		<h3>     Uploaded Documents</h3>
+		<a id="adddoc" style="width: 200px;font-size:6px" target="_blank"></a>
+
+	</div>
+	<br><br>
+	<div id="issueddocs">
+		<h3>    Issued Documents</h3>
+		<a id="issuedlink" style="width: 200px;font-size:6px" target="_blank"></a>
+	</div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+
+
+
+<script >
+	
+    var certi = " ";
+	const input =document.querySelector('input[type="file"]')
+	input.addEventListener('change',function (e){
+      console.log(input.files)
+      const reader = new FileReader()
+      reader.onload=function(){
+      	console.log(reader.result)
+      	 certi=reader.result
+      	
+      	
+      }
+      reader.readAsText(input.files[0])
+     
+     
+
+	},false)
+
+
+if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+       
+        var UploadContract = web3.eth.contract([
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "document_name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "issuing_authority",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "file",
+				"type": "string"
+			}
+		],
+		"name": "Info",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "doc_name",
+				"type": "string"
+			},
+			{
+				"name": "issuing_auth",
+				"type": "string"
+			},
+			{
+				"name": "doc",
+				"type": "string"
+			}
+		],
+		"name": "upload_doc",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]);
+var Up = UploadContract.at('0x92d82862b4a20dc0989ecce4619fadb6c21872e8');
+        console.log(Up);
+
+
+$("#button").click(function() {
+           Up.upload_doc($("#doc-name").val(), $("#auth-name").val(),certi,(err, res) =>{
+           	if(err)
+           		window.location="index3.html";
+               
+           });
+           });
+  
+var infoEvent = Up.Info({},'latest');
+
+
+
+
+
+var result1=""
+var no=1;
+
+
+infoEvent.watch(function (err, result) {
+    if (!err) {      
+        //console.log('Tansaction hash: ' +result.transactionHash);
+
+       $("#adddoc").html(result.transactionHash);
+       var url='https://ropsten.etherscan.io/tx/'+result.transactionHash+'#eventlog';
+       $("#adddoc").attr("href",url)
+
+
+     } 
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+$('#dochash').bind("DOMSubtreeModified",function(){
+
+
+	 var a=$("#dochash").val();
+       $("#issuedlink").html(a);
+       var url='https://ropsten.etherscan.io/tx/'+a+'#eventlog';
+       $("#issuedlink").attr("href",url)
+
+  alert('Document added successfully !!!');
+
+});
+*/
+
+$("#submit").click(function() {
+
+
+
+       var a=$("#dochash").val();
+       $("#issuedlink").html(a);
+       var url='https://ropsten.etherscan.io/tx/'+a+'#eventlog';
+       $("#issuedlink").attr("href",url)
+
+
+           
+
+           });
+
+/*
+
+ $(function() {
+ 	console.log("entered")
+    $('#result1').bind('contentchanged', function() {
+      $.getJSON('/upload', {
+        hash:result1
+      }, function(data) {
+        $("#result").text(data.result);
+        console.log(data.result)
+      });
+      return false;
+    });
+  });
+*/
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

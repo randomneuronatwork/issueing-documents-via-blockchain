@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Digi-Locker</title>
+<style type="text/css">
+	
+	pre {
+		font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+	}
+	div {
+		width: 500px;
+	}
+	h2 {
+		padding-left:70px;
+		font-family: Arial;
+	}
+	body {
+  background-image: url("paper.jpg");
+}
+pre input{
+
+	width: 200px;
+	font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+
+}
+#no1{
+width: 70px;
+	font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+
+
+}
+#no2{
+width: 70px;
+	font-size: 15px;
+		font-family: Arial;
+		font-weight: bold;
+
+
+}
+
+</style>
+
+</head>
+<body>
+	<div style="position:absolute;left:270px;top:225px;">
+<form>
+	
+		
+<h2>Sign up now !!!</h2>
+<pre>      Name        :<input type="text" name="uname"></pre>
+<pre>      Email        :<input type="email" name="email"></pre>
+<pre>      password  :<input type="password" name="password"></pre>
+<pre>                                 <input type="submit" name="submit" id="no1"></pre>
+	
+</form>
+
+</div>
+
+	<div style=" position:absolute;left:800px;top:225px;">
+	<form action="/log" method="POST">
+	
+		
+<h2 >Log In  ! ! !</h2>
+
+<pre>      Email       :<input type="email" name="email" id="email"></pre>
+<pre>      password :<input type="password" name="password" id="password"></pre><br>
+
+<pre>                            <input type="submit" name="submit" id="no2" onclick="verify();"></pre>
+
+	
+</form>
+</div>
+<script >
+	function verify() {
+		var e="shubhamjagnade24@gmail.com";
+		var pass="12345678";
+		if (email.value==e && password.value==pass){
+			
+			 window.location.assign('./profile.html');
+		}
+	}
+</script>
+
+</body>
+</html>
